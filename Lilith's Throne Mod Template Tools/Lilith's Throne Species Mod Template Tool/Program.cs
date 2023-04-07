@@ -17,6 +17,7 @@ namespace LTSMTT
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new Form1());
+            object a = new bodyParts.ArmType("placeholder");
         }
     }
 }
