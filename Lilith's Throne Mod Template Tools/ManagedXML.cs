@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Xml;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace ManagedXML
 {
@@ -109,7 +110,10 @@ namespace ManagedXML
 
     class NestedNode: ManagedXmlNode
     {
-        public Dictionary<string, ManagedXmlNode> content { get; set; }
+        public List<ManagedXmlNode> content { get; set; }
+        public List<string> SubnodeNames { get; set; }
+        public List<ManagedXmlNode> DefaultValue { get; set; }
+        public List<string> DefaultSubnodeNames { get; set; }
         public override void writeToXml(XmlWriter w)
         {
             w.WriteStartElement(this.name);
@@ -117,9 +121,9 @@ namespace ManagedXML
             {
                 w.WriteAttributeString(entry.Key, entry.Value);
             }
-            foreach (KeyValuePair<string, ManagedXmlNode> subnode in this.content)
+            foreach (var entry in Enumerable.Zip(this.SubnodeNames, this.content, (name, subnode) => new { name, subnode }))
             {
-                subnode.Value.writeToXml(w);
+                entry.subnode.writeToXml(w);
             }
             w.WriteEndElement();
         }
@@ -149,9 +153,9 @@ namespace ManagedXML
             AddSubnode(new BooleanNode(subnodeName, def, required));
         }
 
-        public void AddNestedSubnode(string subnodeName, NestedNode def, bool required = true)
+        public void AddNestedSubnode(string subnodeName, Dictionary<string, ManagedXmlNode> def, bool required = true)
         {
-
+            AddNestedSubnode(subnodeName, def, required);
         }
 
         public void AddSubnode(string subnodeName, string typeName, object def, bool required = true, bool cdata = false)
@@ -170,7 +174,7 @@ namespace ManagedXML
                     break;
                 case "node":
                 case "nestednode":
-                    AddNestedSubnode(subnodeName, (NestedNode)def, required);
+                    AddNestedSubnode(subnodeName, new Dictionary<string, ManagedXmlNode>(), required);
                     break;
                 default:
                     throw new ArgumentException(String.Format("Invalid typeName: {0}", typeName), "typeName");
@@ -179,23 +183,49 @@ namespace ManagedXML
 
         public void AddSubnode(ManagedXmlNode subnode)
         {
-            this.content.Add(subnode.name, subnode);
+            this.content.Append(subnode);
+            this.SubnodeNames.Append(subnode.name);
         }
 
         public ManagedXmlNode GetSubnode(string subnodeName)
         {
-            ManagedXmlNode subnode;
-            this.content.TryGetValue(subnodeName, out subnode);
-            return subnode;
+            foreach (var entry in Enumerable.Zip(this.SubnodeNames, this.content, (name, subnode) => new { name, subnode }))
+            {
+                if (entry.name == subnodeName)
+                {
+                    return entry.subnode;
+                }
+            }
+            return null;
         }
         public bool DeleteSubnode(string subnodeName)
         {
-            if (this.content.ContainsKey(subnodeName))
+            bool found = false;
+            for (int i = 0; i < this.content.Count; i++)
             {
-                this.content.Remove(subnodeName);
-                return true;
+                string thisname = this.SubnodeNames[i];
+                if (thisname == subnodeName)
+                {
+                    this.content.RemoveAt(i);
+                    this.SubnodeNames.RemoveAt(i);
+                    return true;
+                }
             }
-            else return false;
+            return false;
+        }
+
+        public NestedNode(string name, List<ManagedXmlNode> dv, bool required = true)
+        {
+            this.name = name;
+            this.required = required;
+            this.DefaultValue = dv;
+            this.content = dv;
+            foreach (ManagedXmlNode subnode in dv)
+            {
+                this.DefaultSubnodeNames.Append(subnode.name);
+                this.SubnodeNames.Append(subnode.name);
+            }
+            
         }
     }
 }
