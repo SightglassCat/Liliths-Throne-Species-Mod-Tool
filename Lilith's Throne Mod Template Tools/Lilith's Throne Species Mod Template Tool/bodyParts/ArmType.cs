@@ -7,6 +7,8 @@ using ManagedXML;
 
 namespace LTSMTT.bodyParts
 {
+    
+
     class ArmType : BodyPartType
     {
         public ArmType(string name="arm", List<string> availableCoveringTypes = null, string race = null) : base(name, availableCoveringTypes, race)
@@ -16,6 +18,9 @@ namespace LTSMTT.bodyParts
             this.AddCDataSubnode("transformationName", "new arm");
             this.AddBooleanSubnode("underarmHairAllowed", true, false);
             this.AddBooleanSubnode("allowsFlight", false);
+            this.AddNestedSubnode("tags", new Dictionary<string, ManagedXmlNode>(), true);
+            this.tags = (NestedNode) this.GetSubnode("tags");
+            this.AddTag("ARM_STANDARD");
         }
     }
 }
