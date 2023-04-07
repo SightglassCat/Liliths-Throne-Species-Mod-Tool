@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Lilith_s_Throne_Species_Mod_Template_Tool
+namespace LTSMTT
 {
     public partial class Form1 : Form
     {

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Lilith_s_Throne_Species_Mod_Template_Tool
+namespace LTSMTT
 {
     static class Program
     {

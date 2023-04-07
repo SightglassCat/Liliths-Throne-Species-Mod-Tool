@@ -1,5 +1,5 @@
 ﻿
-namespace Lilith_s_Throne_Species_Mod_Template_Tool
+namespace LTSMTT
 {
     partial class Form1
     {

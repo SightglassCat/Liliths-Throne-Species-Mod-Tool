@@ -3,7 +3,12 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.32407.337
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lilith's Throne Species Mod Template Tool", "Lilith's Throne Species Mod Template Tool\Lilith's Throne Species Mod Template Tool.csproj", "{A01D1C4F-4B83-4990-A88B-5FD4397F367C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LT Species Mod Template Tool", "Lilith's Throne Species Mod Template Tool\LT Species Mod Template Tool.csproj", "{A01D1C4F-4B83-4990-A88B-5FD4397F367C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{6BD1B40D-56B2-448C-8BDB-FA7E3CEBF00E}"
+	ProjectSection(SolutionItems) = preProject
+		ManagedXML.cs = ManagedXML.cs
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
