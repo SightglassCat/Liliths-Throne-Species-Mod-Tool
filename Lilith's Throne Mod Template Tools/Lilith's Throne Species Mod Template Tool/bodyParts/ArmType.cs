@@ -18,8 +18,7 @@ namespace LTSMTT.bodyParts
             this.AddCDataSubnode("transformationName", "new arm");
             this.AddBooleanSubnode("underarmHairAllowed", true, false);
             this.AddBooleanSubnode("allowsFlight", false);
-            this.AddNestedSubnode("tags", new Dictionary<string, ManagedXmlNode>(), true);
-            this.tags = (NestedNode) this.GetSubnode("tags");
+            this.tags = this.AddNestedSubnode("tags", new List<ManagedXmlNode>(), true);
             this.AddTag("ARM_STANDARD");
         }
     }

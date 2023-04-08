@@ -12,7 +12,7 @@ namespace LTSMTT.bodyParts
         public List<string> AvailableCoveringTypes { get; set; }
         public string race { get; set; }
         public NestedNode tags;
-        public BodyPartType(string name = null, List<string> availableCoveringTypes=null, string race=null) : base (name, new Dictionary<string, ManagedXmlNode>(), true)
+        public BodyPartType(string name = null, List<string> availableCoveringTypes=null, string race=null) : base (name, new List<ManagedXmlNode>(), true)
         {
             this.name = name;
             this.AvailableCoveringTypes = availableCoveringTypes;
@@ -21,7 +21,11 @@ namespace LTSMTT.bodyParts
 
         public void AddTag(string tagName)
         {
-            this.tags.AddStringSubnode("tag", tagName, true, false);
+            this.tags.AddStringSubnode("tag", tagName, true);
+        }
+        public void ClearTags()
+        {
+            this.tags.Clear();
         }
     }
 }
