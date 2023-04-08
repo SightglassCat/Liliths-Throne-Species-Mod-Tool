@@ -128,7 +128,7 @@ namespace ManagedXML
             w.WriteEndElement();
         }
 
-        public void AddStringSubnode(string subnodeName, string def, bool required = true, bool cdata = false)
+        /*public void AddStringSubnode(string subnodeName, string def, bool required = true, bool cdata = false)
         {
             if (cdata)
             {
@@ -138,27 +138,43 @@ namespace ManagedXML
             {
                 AddSubnode(new StringNode(subnodeName, def, required));
             }
-        }
-        public void AddCDataSubnode(string subnodeName, string def, bool required=true)
+        }*/
+
+        public StringNode AddStringSubnode(string subnodeName, string def, bool required=true)
         {
-            AddSubnode(new CDataNode(subnodeName, def, required));
+            StringNode sn = new StringNode(subnodeName, def, required);
+            AddSubnode(sn);
+            return sn;
         }
 
-        public void AddIntSubnode(string subnodeName, int def, bool required = true)
+        public CDataNode AddCDataSubnode(string subnodeName, string def, bool required=true)
         {
-            AddSubnode(new IntNode(subnodeName, def, required));
-        }
-        public void AddBooleanSubnode(string subnodeName, bool def, bool required=true)
-        {
-            AddSubnode(new BooleanNode(subnodeName, def, required));
+            CDataNode cdn = new CDataNode(subnodeName, def, required);
+            AddSubnode(cdn);
+            return cdn;
         }
 
-        public void AddNestedSubnode(string subnodeName, Dictionary<string, ManagedXmlNode> def, bool required = true)
+        public IntNode AddIntSubnode(string subnodeName, int def, bool required = true)
         {
-            AddNestedSubnode(subnodeName, def, required);
+            IntNode intn = new IntNode(subnodeName, def, required);
+            AddSubnode(intn);
+            return intn;
+        }
+        public BooleanNode AddBooleanSubnode(string subnodeName, bool def, bool required=true)
+        {
+            BooleanNode bn = new BooleanNode(subnodeName, def, required);
+            AddSubnode(bn);
+            return bn;
         }
 
-        public void AddSubnode(string subnodeName, string typeName, object def, bool required = true, bool cdata = false)
+        public NestedNode AddNestedSubnode(string subnodeName, List<ManagedXmlNode> def, bool required = true)
+        {
+            NestedNode nn = new NestedNode(subnodeName, def, required);
+            AddSubnode(nn);
+            return nn;
+        }
+
+        /*public void AddSubnode(string subnodeName, string typeName, object def, bool required = true, bool cdata = false)
         {
             switch (typeName.ToLower())
             {
@@ -179,12 +195,13 @@ namespace ManagedXML
                 default:
                     throw new ArgumentException(String.Format("Invalid typeName: {0}", typeName), "typeName");
             }
-        }
+        }*/
 
-        public void AddSubnode(ManagedXmlNode subnode)
+        public ManagedXmlNode AddSubnode(ManagedXmlNode subnode)
         {
             this.content.Append(subnode);
             this.SubnodeNames.Append(subnode.name);
+            return subnode;
         }
 
         public ManagedXmlNode GetSubnode(string subnodeName)
@@ -200,7 +217,6 @@ namespace ManagedXML
         }
         public bool DeleteSubnode(string subnodeName)
         {
-            bool found = false;
             for (int i = 0; i < this.content.Count; i++)
             {
                 string thisname = this.SubnodeNames[i];
@@ -214,12 +230,18 @@ namespace ManagedXML
             return false;
         }
 
+        public void Clear()
+        {
+            this.content.Clear();
+            this.SubnodeNames.Clear();
+        }
+
         public NestedNode(string name, List<ManagedXmlNode> dv, bool required = true)
         {
             this.name = name;
             this.required = required;
             this.DefaultValue = dv;
-            this.content = dv;
+            this.content = new List<ManagedXmlNode>(dv);
             foreach (ManagedXmlNode subnode in dv)
             {
                 this.DefaultSubnodeNames.Append(subnode.name);
